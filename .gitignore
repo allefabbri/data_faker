@@ -29,3 +29,5 @@
 
 # Data
 *.txt
+*.json
+*.png
