@@ -1,3 +1,3 @@
 all: 
-	$(CXX) -std=c++11 -o data_faker.exe math_lib.c data_faker.cpp
-	./data_faker.exe
+	$(CXX) -std=c++11 -Isrc -o bin/data_faker.exe src/math_lib.c src/data_faker.cpp
+	./bin/data_faker.exe
