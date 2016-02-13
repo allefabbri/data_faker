@@ -43,6 +43,7 @@
     <ClInclude Include="..\src\jsoncons\output_format.hpp" />
     <ClInclude Include="..\src\jsoncons\parse_error_handler.hpp" />
     <ClInclude Include="..\src\math_lib.h" />
+    <ClInclude Include="..\src\noise_lib.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{642C0042-6897-42D9-8CBD-34E7844BAAB9}</ProjectGuid>

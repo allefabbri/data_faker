@@ -86,5 +86,8 @@
     <ClInclude Include="..\src\jsoncons\output_format.hpp">
       <Filter>Header Files\jsoncons</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\noise_lib.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
