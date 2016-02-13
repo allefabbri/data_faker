@@ -146,6 +146,42 @@ MAT3D rotate_mat3d(MAT3D m, MAT3D rot){
 }
 
 
+// 6d vector
+VEC6D set_vec6d(double ax, double ay, double az, double gx, double gy, double gz) {
+  VEC6D v;
+  v.a = set_vec3d(ax, ay, az);
+  v.g = set_vec3d(gx, gy, gz);
+  return v;
+}
+
+VEC6D rotate_vec6d(VEC6D v, MAT3D rot) {
+  VEC6D vr;
+  vr.a = rotate_vec3d(v.a, rot);
+  vr.g = rotate_vec3d(v.g, rot);
+  return vr;
+}
+
+
+// 6d matrix
+MAT6D set_mat6d(MAT3D A00, MAT3D A01, MAT3D A10, MAT3D A11) {
+  MAT6D m;
+  m.A[0][0] = A00;
+  m.A[0][1] = A01;
+  m.A[1][0] = A10;
+  m.A[1][1] = A11;
+  return m;
+}
+
+MAT6D rotate_mat6d(MAT6D m, MAT3D rot) {
+  MAT6D mr;
+  mr.A[0][0] = rotate_mat3d(m.A[0][0], rot);
+  mr.A[0][1] = rotate_mat3d(m.A[0][1], rot);
+  mr.A[1][0] = rotate_mat3d(m.A[1][0], rot);
+  mr.A[1][1] = rotate_mat3d(m.A[1][1], rot);
+  return mr;
+}
+
+
 // 2d eigenvalue problem
 
 // Returns the eigensystem of a 2x2 matrix of the form
@@ -219,17 +255,31 @@ double check_eigs(EigenSys es){
 
 // display function
 void print_vec3d(VEC3D v, const char * name){
-	printf("%s = %6.3f %6.3f %6.3f\n", name, v.x, v.y, v.z);
+	printf("%s = \n| %6.3f  %6.3f  %6.3f |\n", name, v.x, v.y, v.z);
 }
 
 void print_mat3d(MAT3D m, const char * name){
 	printf("%s = \n| %6.3f %6.3f %6.3f |\n| %6.3f %6.3f %6.3f |\n| %6.3f %6.3f %6.3f |\n", name, m.xx, m.xy, m.xz, m.yx, m.yy, m.yz, m.zx, m.zy, m.zz);
 }
 
-void print_eigs(EigenSys es){
-	printf("Eigensystem for matrix\n\t| %6.2f  %6.2f |\n\t| %6.2f  %6.2f |\n",es.a[0][0],es.a[0][1],es.a[1][0],es.a[1][1]);
-	printf("\nl1 = %6.2f\nv1 = ( %6.2f  %6.2f )\nu1 = ( %6.2f  %6.2f )\n",es.l1,es.v1[0],es.v1[1],es.u1[0],es.u1[1]);
-	printf("\nl2 = %6.2f\nv2 = ( %6.2f  %6.2f )\nu2 = ( %6.2f  %6.2f )\n",es.l2,es.v2[0],es.v2[1],es.u2[0],es.u2[1]);
-	printf("\ncheck = %f\n",check_eigs(es));
+void print_vec6d(VEC6D v, const char * name) {
+  printf("%s = \n| %6.3f %6.3f %6.3f  ,  %6.3f %6.3f %6.3f |\n", name, v.a.x, v.a.y, v.a.z, v.g.x, v.g.y, v.g.z);
 }
 
+void print_mat6d(MAT6D m, const char * name) {
+  printf("%s = \n", name);
+  printf("| %6.3f %6.3f %6.3f \t %6.3f %6.3f %6.3f |\n", m.A[0][0].xx, m.A[0][0].xy, m.A[0][0].xz, m.A[0][1].xx, m.A[0][1].xy, m.A[0][1].xz);
+  printf("| %6.3f %6.3f %6.3f \t %6.3f %6.3f %6.3f |\n", m.A[0][0].yx, m.A[0][0].yy, m.A[0][0].yz, m.A[0][1].yx, m.A[0][1].yy, m.A[0][1].yz);
+  printf("| %6.3f %6.3f %6.3f \t %6.3f %6.3f %6.3f |\n", m.A[0][0].zx, m.A[0][0].zy, m.A[0][0].zz, m.A[0][1].zx, m.A[0][1].zy, m.A[0][1].zz);
+  printf("| %8s                                    |\n", " ");
+  printf("| %6.3f %6.3f %6.3f \t %6.3f %6.3f %6.3f |\n", m.A[1][0].xx, m.A[1][0].xy, m.A[1][0].xz, m.A[1][1].xx, m.A[1][1].xy, m.A[1][1].xz);
+  printf("| %6.3f %6.3f %6.3f \t %6.3f %6.3f %6.3f |\n", m.A[1][0].yx, m.A[1][0].yy, m.A[1][0].yz, m.A[1][1].yx, m.A[1][1].yy, m.A[1][1].yz);
+  printf("| %6.3f %6.3f %6.3f \t %6.3f %6.3f %6.3f |\n", m.A[1][0].zx, m.A[1][0].zy, m.A[1][0].zz, m.A[1][1].zx, m.A[1][1].zy, m.A[1][1].zz);
+}
+
+void print_eigs(EigenSys es, const char * tag){
+	printf("%s = \n\t| %6.3f  %6.3f |\n\t| %6.3f  %6.3f |\n", tag, es.a[0][0],es.a[0][1],es.a[1][0],es.a[1][1]);
+	printf("l1 = %6.3f\nv1 = | %6.3f  %6.3f |\nu1 = | %6.3f  %6.3f |\n",es.l1,es.v1[0],es.v1[1],es.u1[0],es.u1[1]);
+	printf("l2 = %6.3f\nv2 = | %6.3f  %6.3f |\nu2 = | %6.3f  %6.3f |\n",es.l2,es.v2[0],es.v2[1],es.u2[0],es.u2[1]);
+	printf("check = %f\n",check_eigs(es));
+}

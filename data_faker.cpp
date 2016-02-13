@@ -26,8 +26,14 @@ using namespace std;
 #define RAD_TO_DEG    57.2957795131             // 180/pi
 #define M_PI          3.14159265358979323846    /* pi */
 
+#define ENABLE_NORMAL
+
 std::default_random_engine generator;
+#ifndef ENABLE_NORMAL
 std::uniform_real_distribution<double> dist_u(0.0,1.0);
+#else
+std::uniform_real_distribution<double> dist_u(0.0,0.05);
+#endif
 std::uniform_real_distribution<double> dist_theta(0.0,2.0*M_PI);
 std::uniform_real_distribution<double> dist_phi(0.0,M_PI);
 
