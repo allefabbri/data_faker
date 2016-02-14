@@ -24,10 +24,10 @@
 //#define ENABLE_NORMAL
 
 std::default_random_engine generator;
-#ifndef ENABLE_NORMAL
-std::uniform_real_distribution<double> dist_u(0.0, 1.0);
+#ifdef ENABLE_NORMAL
+std::normal_distribution<double> dist_u(0.0, 0.05);
 #else
-std::uniform_real_distribution<double> dist_u(0.0, 0.05);
+std::uniform_real_distribution<double> dist_u(0.0, 1.0);
 #endif
 std::uniform_real_distribution<double> dist_theta(0.0, 2.0*M_PI);
 std::uniform_real_distribution<double> dist_phi(0.0, M_PI);
