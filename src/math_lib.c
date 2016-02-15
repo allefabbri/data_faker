@@ -67,6 +67,12 @@ void normalize_vec3d(VEC3D * v) {
   v->mod = 1.0;
 }
 
+VEC3D _normalize_vec3d(VEC3D v) {
+  VEC3D n;
+  n = set_vec3d(v.x / v.mod, v.y / v.mod, v.z / v.mod);
+  return n;
+}
+
 double prod_dot(VEC3D a, VEC3D b) {
   return a.x * b.x + a.y * b.y + a.z * b.z;
 }
@@ -114,10 +120,10 @@ MAT2D product_mat2d(MAT2D A, MAT2D B) {
 }
 
 void multiply_mat2d(double alpha, MAT2D * A) {
-  A->xx = alpha * A->xy;
-  A->xx = alpha * A->xy;
-  A->yx = alpha * A->yy;
-  A->yx = alpha * A->yy;
+  A->xx *= alpha;
+  A->xy *= alpha;
+  A->yx *= alpha;
+  A->yy *= alpha;
 }
 
 MAT2D make_rotation_2d_cs(double c, double s) {

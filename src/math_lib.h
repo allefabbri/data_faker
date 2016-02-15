@@ -6,6 +6,24 @@
 extern "C" {
 #endif
 
+  // 2d vector algebra
+  typedef struct VEC2D {
+    double x, y, mod;
+  } VEC2D;
+
+  VEC2D set_vec2d(double, double);
+
+  void setmod_vec2d(VEC2D *);
+
+  void normalize_vec2d(VEC2D *);
+
+  double prod_dot_2d(VEC2D, VEC2D);
+
+  double prod_cross_2d(VEC2D, VEC2D);            // returns z-component on a right-handed frame
+
+  void multiply_vec2d(double, VEC2D *);
+
+
   // 3d vector algebra
   typedef struct VEC3D {
     double x, y, z, mod;
@@ -17,11 +35,35 @@ extern "C" {
 
   void normalize_vec3d(VEC3D *);
 
+  VEC3D _normalize_vec3d(VEC3D v);
+
   double prod_dot(VEC3D, VEC3D);
 
   VEC3D prod_cross(VEC3D, VEC3D);
 
   void multiply_vec3d(double, VEC3D *);
+
+
+  // 2d matrix algebra
+  typedef struct MAT2D {
+    double xx, xy, yx, yy;
+  } MAT2D;
+
+  MAT2D set_mat2d(double, double, double, double);
+
+  MAT2D transpose_mat2d(MAT2D);
+
+  MAT2D product_mat2d(MAT2D, MAT2D);
+
+  void multiply_mat2d(double, MAT2D *);
+
+  MAT2D make_rotation_2d_cs(double, double);
+
+  MAT2D make_rotation_2d(double);
+
+  VEC2D rotate_vec2d(MAT2D, VEC2D);
+
+  MAT2D rotate_mat2d(MAT2D, MAT2D);
 
 
   // 3d matrix algebra
@@ -41,7 +83,7 @@ extern "C" {
 
   MAT3D make_rotation(VEC3D, double);
 
-  VEC3D rotate_vec3d(VEC3D, MAT3D);
+  VEC3D rotate_vec3d(MAT3D, VEC3D);
 
   MAT3D rotate_mat3d(MAT3D, MAT3D);
 
@@ -53,7 +95,7 @@ extern "C" {
 
   VEC6D set_vec6d(double, double, double, double, double, double);
 
-  VEC6D rotate_vec6d(VEC6D, MAT3D);
+  VEC6D rotate_vec6d(MAT3D, VEC6D);
 
 
   // 6d matrix
@@ -63,25 +105,29 @@ extern "C" {
 
   MAT6D set_mat6d(MAT3D, MAT3D, MAT3D, MAT3D);
 
-  MAT6D rotate_mat6d(MAT6D, MAT3D);
+  MAT6D rotate_mat6d(MAT3D, MAT6D);
 
 
   // 2d eigenvalue problem
   typedef struct EigenSys {
-    double a[2][2];
+    MAT2D A;
     double l1, l2;
-    double v1[2], v2[2], u1[2], u2[2];
+    VEC2D v1, v2, u1, u2;
   } EigenSys;
 
   EigenSys eigs_2x2_sym_normalized(double, double);
 
-  EigenSys eigs_2x2_sym(double[2][2]);
+  EigenSys eigs_2x2_sym(MAT2D);
 
-  double check_eigs(EigenSys);
+  int check_eigs(EigenSys);
 
 
   // display function
+  void print_vec2d(VEC2D, const char *);
+  
   void print_vec3d(VEC3D, const char *);
+
+  void print_mat2d(MAT2D, const char *);
 
   void print_mat3d(MAT3D, const char *);
 
