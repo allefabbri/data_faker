@@ -112,7 +112,7 @@ int main(int argc, char ** argv) {
   data << "# PHI   = " << fixed << setprecision(1) << setw(5) << phi*RAD_TO_DEG
     << " (deg) = " << fixed << setprecision(3) << setw(5) << phi   << " (rad)" << endl; header_counter++;
   data << "#" << endl; header_counter++;
-  data << "#    t       x      y       z" << endl; header_counter++;
+  data << "#    t       x      y       z       x^2+y^2" << endl; header_counter++;
   for (int i = 0; i < samples; i++) {
     double t, x, y, z;
     double noise_x, noise_y, noise_z;
@@ -125,7 +125,7 @@ int main(int argc, char ** argv) {
     rotate(alpha, theta, phi, x, y, z);
 
     data << fixed << setprecision(4) << t << "\t" 
-      << fixed << setprecision(3) << x << "\t" << y << "\t" << z << endl;
+      << fixed << setprecision(3) << x << "\t" << y << "\t" << z << "\t" << sqrt(x*x+y*y) << endl;
   }
   data.close();
 
@@ -143,6 +143,7 @@ points = 0.3
 set style line  21 lc rgb '#0072bd' pointtype 7 pointsize points  # blue
 set style line  22 lc rgb '#d95319' pointtype 7 pointsize points  # orange
 set style line  23 lc rgb '#77ac30' pointtype 7 pointsize points  # green
+set style line  24 lc rgb '#a2142f' pointtype 7 pointsize points  # red
 set style line 101 lc rgb '#000000' lt 1 lw 1                     # black
 set style line 102 lc rgb '#d6d7d9' lt 1 lw 1                     # gray
 # Axes label
@@ -163,15 +164,29 @@ set key top
 # Plot
 input = ")" << out_basename << R"(.txt"
 set size 0.5, 0.5
+set origin -0.05, 0.45
 set xlabel 'x'
 set ylabel 'y'
-plot input every ::)" << header_counter << R"( using 2:3 notitle with points ls 21
+plot input using 2:3 notitle with points ls 21
+set size 0.5, 0.5
+set origin 0.35, 0.45
 set xlabel 'z'
 set ylabel 'y'
-plot input every ::)" << header_counter << R"( using 4:3 notitle with points ls 22
+plot input using 4:3 notitle with points ls 22
+set size 0.5, 0.5
+set origin -0.05, 0.0
 set xlabel 'x'
 set ylabel 'z'
-plot input every ::)" << header_counter << R"( using 2:4 notitle with points ls 23
+plot input using 2:4 notitle with points ls 23
+set size 0.5, 0.5
+set origin 0.35, 0.0
+set xlabel 'rho'
+set ylabel 'z'
+set label "Angles:"                  at screen 0.8, 0.56 front font ",14"
+set label "{/Symbol a} = )" << fixed << setprecision(1) << alpha * RAD_TO_DEG << R"( (deg) " at screen 0.8, 0.52 front font ",14"
+set label "{/Symbol f} = )" << fixed << setprecision(1) << phi * RAD_TO_DEG   << R"( (deg) " at screen 0.8, 0.48 front font ",14"
+set label "{/Symbol q} = )" << fixed << setprecision(1) << theta * RAD_TO_DEG << R"( (deg) " at screen 0.8, 0.44 front font ",14"
+plot input every ::)" << header_counter << R"( using 5:4 notitle with points ls 24
 unset multiplot
 )";
 

@@ -65,9 +65,9 @@ void rotate(double alpha, double theta, double phi, double &x, double &y, double
   rot_z1 = make_rotation(set_vec3d(0.0, 0.0, 1.0), alpha);
   rot_y = make_rotation(set_vec3d(0.0, 1.0, 0.0), phi);
   rot_z2 = make_rotation(set_vec3d(0.0, 0.0, 1.0), theta);
-  vr = rotate_vec3d(vr, rot_z1);
-  vr = rotate_vec3d(vr, rot_y);
-  vr = rotate_vec3d(vr, rot_z2);
+  vr = rotate_vec3d(rot_z1, vr);
+  vr = rotate_vec3d(rot_y, vr);
+  vr = rotate_vec3d(rot_z2, vr);
   x = vr.x;
   y = vr.y;
   z = vr.z;
